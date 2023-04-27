@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
@@ -122,6 +123,19 @@ class ImageLoader implements platform.ImageLoader {
           yield decoded;
         }
       }
+    } on HttpException catch (e) {
+      // Depending on where the exception was thrown, the image cache may not
+      // have had a chance to track the key in the cache at all.
+      // Schedule a microtask to give the cache a chance to add the key.
+      scheduleMicrotask(() {
+        evictImage();
+      });
+
+      if (errorListener != null && e.message.contains('HttpException: Invalid statusCode: 403')) {
+        errorListener.call();
+      } else {
+        rethrow;
+      }
     } catch (e) {
       // Depending on where the exception was thrown, the image cache may not
       // have had a chance to track the key in the cache at all.
@@ -130,10 +144,8 @@ class ImageLoader implements platform.ImageLoader {
         evictImage();
       });
 
-      if (errorListener == null) {
-        rethrow;
-      }
-      errorListener.call();
+      errorListener?.call();
+      rethrow;
     } finally {
       await chunkEvents.close();
     }
