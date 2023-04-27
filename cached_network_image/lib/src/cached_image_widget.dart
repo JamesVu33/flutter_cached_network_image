@@ -201,7 +201,8 @@ class CachedNetworkImage extends StatelessWidget {
   /// Will resize the image and store the resized image in the disk cache.
   final int? maxHeightDiskCache;
 
-  /// Will resize the image and store the resized image in the disk cache.
+  /// Function which is called after loading the image failed.
+  /// if null, [rethrow] will be called
   final Function(Object)? errorListener;
 
   /// CachedNetworkImage shows a network image using a caching mechanism. It also
