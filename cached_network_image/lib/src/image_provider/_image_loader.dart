@@ -27,7 +27,7 @@ class ImageLoader implements platform.ImageLoader {
     int? maxHeight,
     int? maxWidth,
     Map<String, String>? headers,
-    Function()? errorListener,
+    Function(Object)? errorListener,
     ImageRenderMethodForWeb imageRenderMethodForWeb,
     Function() evictImage,
   ) {
@@ -56,7 +56,7 @@ class ImageLoader implements platform.ImageLoader {
       int? maxHeight,
       int? maxWidth,
       Map<String, String>? headers,
-      Function()? errorListener,
+      Function(Object)? errorListener,
       ImageRenderMethodForWeb imageRenderMethodForWeb,
       Function() evictImage) {
     return _load(
@@ -86,7 +86,7 @@ class ImageLoader implements platform.ImageLoader {
     int? maxHeight,
     int? maxWidth,
     Map<String, String>? headers,
-    Function()? errorListener,
+    Function(Object)? errorListener,
     ImageRenderMethodForWeb imageRenderMethodForWeb,
     Function() evictImage,
   ) async* {
@@ -130,8 +130,10 @@ class ImageLoader implements platform.ImageLoader {
         evictImage();
       });
 
-      errorListener?.call();
-      rethrow;
+      if (errorListener == null)
+        rethrow;
+
+      errorListener.call(e);
     } finally {
       await chunkEvents.close();
     }
