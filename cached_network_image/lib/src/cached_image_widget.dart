@@ -203,7 +203,7 @@ class CachedNetworkImage extends StatelessWidget {
 
   /// Function which is called after loading the image failed.
   /// if null, [rethrow] will be called
-  final Function(Object)? errorListener;
+  final Function(Exception)? errorListener;
 
   /// CachedNetworkImage shows a network image using a caching mechanism. It also
   /// provides support for a placeholder, showing an error and fading into the

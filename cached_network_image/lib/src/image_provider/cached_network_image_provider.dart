@@ -16,7 +16,7 @@ import 'package:cached_network_image_platform_interface/cached_network_image_pla
     show ImageLoader;
 
 /// Function which is called after loading the image failed.
-typedef ErrorListener = void Function(Object);
+typedef ErrorListener = void Function(Exception);
 
 /// IO implementation of the CachedNetworkImageProvider; the ImageProvider to
 /// load network images using a cache.
